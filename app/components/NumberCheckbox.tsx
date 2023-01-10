@@ -1,14 +1,15 @@
-import React from "react"
+import React from "react";
+import { getAllOtherKeys, lockOtherSkillsForIndex } from "~/utils";
 
 type NumberCheckboxProps = {
-  index: number
-  displayNumber?: boolean
-  skills: any
-  setSkills: React.Dispatch<any>
-  skillsKey: string
-  render: boolean
-  setRender: React.Dispatch<boolean>
-}
+  index: number;
+  displayNumber?: boolean;
+  skills: any;
+  setSkills: React.Dispatch<any>;
+  skillsKey: string;
+  render: boolean;
+  setRender: React.Dispatch<boolean>;
+};
 
 export default function NumberCheckbox({
   index,
@@ -17,28 +18,23 @@ export default function NumberCheckbox({
   skills,
   skillsKey,
   render,
-  setRender,
+  setRender
 }: NumberCheckboxProps) {
-  const skill = skills[skillsKey][index]
-  const checked = skill.toggled
-  const locked = skill.locked
+  const skill = skills[skillsKey][index];
+  const checked = skill.toggled;
+  const locked = skill.locked;
   return (
     <button
       onClick={() => {
-        const keys = Object.keys(skills).filter((key) => key !== skillsKey)
-        const clone = skills
-        const skillIndexVal = clone[skillsKey][index].toggled
+        const keys = getAllOtherKeys(skillsKey, skills);
+        const clone = skills;
+        const skillIndexVal = clone[skillsKey][index].toggled;
 
-        keys.forEach((key) => {
-          clone[key][index] = {
-            toggled: false,
-            locked: !skillIndexVal,
-          }
-        })
+        lockOtherSkillsForIndex(keys, clone, index);
 
-        clone[skillsKey][index] = { toggled: !skillIndexVal, locked: false }
-        setSkills(clone)
-        setRender(!render)
+        clone[skillsKey][index] = { toggled: !skillIndexVal, locked: false };
+        setSkills(clone);
+        setRender(!render);
       }}
       className={`flex justify-center items-center w-6 h-6 text-center shadow-sm rounded p-4 transition  ${
         checked
@@ -49,5 +45,5 @@ export default function NumberCheckbox({
       }`}>
       {displayNumber ? index + 1 : null}
     </button>
-  )
+  );
 }

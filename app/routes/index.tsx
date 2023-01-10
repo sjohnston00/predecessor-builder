@@ -1,9 +1,17 @@
 import React, { useState } from "react";
 import NumberCheckbox from "~/components/NumberCheckbox";
 import useKeypress from "react-use-keypress";
+import {
+  checkAbilityMaxed,
+  getAllOtherKeys,
+  lockOtherSkillsForIndex
+} from "~/utils";
 
 export default function Index() {
   useKeypress(["q", "e", "r", "t", "Backspace"], ({ key }) => {
+    console.log(
+      "TODO: Move this functionality to function to use in NumberCheckbox component"
+    );
     console.log("TODO: Lock all other ability for this index");
     console.log("TODO: Fix bug of index 0");
     let ability = key;
@@ -22,14 +30,11 @@ export default function Index() {
 
     const clone = skills;
 
+    const keys = getAllOtherKeys(ability, clone);
+    lockOtherSkillsForIndex(keys, clone, nextQIndex);
+
     const abilityCount = levels.filter((level) => level === ability).length;
-    if (
-      (ability === "r" && abilityCount >= 3) ||
-      (ability !== "r" && abilityCount >= 5)
-    ) {
-      alert(`${ability} has already been maxed out`);
-      return;
-    }
+    checkAbilityMaxed(ability, abilityCount);
 
     clone[ability][nextQIndex] = {
       toggled: true,
