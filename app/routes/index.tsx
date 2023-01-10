@@ -1,7 +1,40 @@
 import React, { useState } from "react"
 import NumberCheckbox from "~/components/NumberCheckbox"
+import useKeypress from "react-use-keypress"
 
 export default function Index() {
+  useKeypress(["q", "e", "r", "t", "Backspace"], ({ key }) => {
+    console.log(
+      "TODO: Make sure this ability does not already have 5 skill points"
+    )
+    console.log(
+      "TODO: Make sure the ULT ability does not already have 3 skill points"
+    )
+
+    console.log("TODO: Lock all other ability for this index")
+    console.log("TODO: Fix bug of index 0")
+    let ability = key
+    if (key === "t") {
+      ability = "rightClick"
+    }
+
+    if (key === "Backspace") {
+      console.log("Set the last instance of true to ogSkillToggle")
+      return
+    }
+
+    const nextQIndex = lastUntoggledIndex() + 1
+
+    if (nextQIndex >= LEVELS) return
+
+    const clone = skills
+    clone[ability][nextQIndex] = {
+      toggled: true,
+      locked: false,
+    }
+    setSkills(clone)
+    setRender(!render)
+  })
   const LEVELS = 18
   const ogSkillToggle = {
     toggled: false,
@@ -16,19 +49,51 @@ export default function Index() {
   const [skills, setSkills] = useState<any>(originalSkills)
   const [render, setRender] = useState(false)
 
+  const levels = Array(LEVELS).fill(undefined)
+  Object.entries(skills).forEach(([key]) => {
+    skills[key].forEach((skillLevel, index) =>
+      skillLevel.toggled ? (levels[index] = key) : null
+    )
+  })
+  const levelsIncomplete = levels.includes(undefined)
+
+  const lastUntoggledIndex = () => {
+    let index = 0
+    Object.entries(skills).forEach(([key]) => {
+      const abilities = skills[key].map((skill) => skill.toggled)
+      const lastIndex = abilities.lastIndexOf(true)
+      lastIndex > index ? (index = lastIndex) : null
+    })
+    return index
+  }
+
+  const calcLevels = () => {
+    if (levelsIncomplete) {
+      alert("You must add every level before submitting")
+      return
+    }
+    console.log(levels)
+  }
+
   return (
     <>
       <div className="flex w-fit m-auto flex-col justify-center items-center">
-        <h1 className="text-5xl mb-8 font-bold tracking-wide self-start">
+        <h1 className="text-5xl mb-4 font-bold tracking-wide self-start">
           Skill Order
+          <span className="block text-sm font-normal opacity-50 mt-4">
+            (Pressing the skill key will add to the skill order and backspace
+            will remove the last one (try pressing 'q', then 'backspace'))
+          </span>
         </h1>
         <div className="flex">
           <div className="w-40"></div>
-          <div className="flex mb-2 gap-3 w-[780px]">
-            {Array(18)
+          <div className="flex mb-2 gap-3">
+            {Array(LEVELS)
               .fill(undefined)
               .map((a, index) => (
-                <span key={`skill-column-${index}`} className="w-8 text-center">
+                <span
+                  key={`skill-column-${index}`}
+                  className="h-8 w-8 text-center rounded">
                   {index + 1}
                 </span>
               ))}
@@ -53,7 +118,10 @@ export default function Index() {
           </div>
         ))}
         <div className="flex gap-2">
-          <button className="p-2 rounded bg-indigo-500 text-white mt-2 disabled:opacity-30 transition">
+          <button
+            className="p-2 rounded bg-indigo-500 text-white mt-2 disabled:opacity-30 transition"
+            onClick={calcLevels}
+            disabled={levelsIncomplete}>
             Submit
           </button>
           <button
