@@ -19,11 +19,8 @@ export function lockOtherSkillsForIndex(
 }
 
 export function checkAbilityMaxed(ability: string, abilityCount: number) {
-  if (
+  return (
     (ability === "r" && abilityCount >= 3) ||
     (ability !== "r" && abilityCount >= 5)
-  ) {
-    alert(`ability: "${ability}" has already been maxed out`);
-    return;
-  }
+  );
 }

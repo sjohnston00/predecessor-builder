@@ -34,7 +34,11 @@ export default function Index() {
     lockOtherSkillsForIndex(keys, clone, nextQIndex);
 
     const abilityCount = levels.filter((level) => level === ability).length;
-    checkAbilityMaxed(ability, abilityCount);
+
+    if (checkAbilityMaxed(ability, abilityCount)) {
+      alert(`ability: "${ability}" has already been maxed out`);
+      return;
+    }
 
     clone[ability][nextQIndex] = {
       toggled: true,

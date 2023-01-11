@@ -1,5 +1,9 @@
 import React from "react";
-import { getAllOtherKeys, lockOtherSkillsForIndex } from "~/utils";
+import {
+  checkAbilityMaxed,
+  getAllOtherKeys,
+  lockOtherSkillsForIndex
+} from "~/utils";
 
 type NumberCheckboxProps = {
   index: number;
@@ -31,6 +35,14 @@ export default function NumberCheckbox({
         const skillIndexVal = clone[skillsKey][index].toggled;
 
         lockOtherSkillsForIndex(keys, clone, index);
+
+        const abilityCount = clone[skillsKey].filter(
+          (level) => level.toggled === true
+        ).length;
+        if (checkAbilityMaxed(skillsKey, abilityCount)) {
+          alert(`ability: "${skillsKey}" has already been maxed out`);
+          return;
+        }
 
         clone[skillsKey][index] = { toggled: !skillIndexVal, locked: false };
         setSkills(clone);
