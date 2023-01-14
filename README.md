@@ -1,3 +1,5 @@
+# todos
+- [ ] make schemas for hero, abilities and builds
 # Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)
