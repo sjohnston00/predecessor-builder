@@ -1,5 +1,11 @@
 # todos
-- [ ] make schemas for hero, abilities and builds
+
+- [x] make schemas for hero, abilities and builds
+- [ ] fix `<NumberCheckbox/>` when going from toggled: true to toggled: false not unlocking all the other checkboxes again
+- [ ] fix `<NumberCheckbox/>` when setting toggled: false, when the ability has already been maxed out, this show an error message and doesn't untoggled the skill point, so you're stuck at this point
+- [x] Move new build page to `/builds/new` route
+- [ ] Add `backspace` functionality on the skill order section
+
 # Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)

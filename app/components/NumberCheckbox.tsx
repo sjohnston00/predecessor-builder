@@ -29,6 +29,7 @@ export default function NumberCheckbox({
   const locked = skill.locked;
   return (
     <button
+      type='button'
       onClick={() => {
         const keys = getAllOtherKeys(skillsKey, skills);
         const clone = skills;
