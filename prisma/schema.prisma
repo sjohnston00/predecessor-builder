@@ -22,3 +22,28 @@ model User {
   roleId    Int    @default(1)
   role      Role   @relation(fields: [roleId], references: [id])
 }
+
+model Ability {
+  id          Int    @id @default(autoincrement())
+  name        String
+  mana        Int
+  description Int
+  key         String
+  heroId      Int
+  hero        Hero   @relation(fields: [heroId], references: [id])
+}
+
+model Hero {
+  id          Int    @id @default(autoincrement())
+  name        String 
+  abilities   Ability[] 
+  builds   Build[] 
+}
+
+model Build {
+  id            Int    @id @default(autoincrement())
+  name          String 
+  heroId        Int
+  hero          Hero   @relation(fields: [heroId], references: [id])
+  abilityOrder  String[]
+}
