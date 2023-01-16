@@ -21,6 +21,7 @@ model User {
   email     String @unique
   roleId    Int    @default(1)
   role      Role   @relation(fields: [roleId], references: [id])
+  builds    Build[]
 }
 
 model Ability {
@@ -37,7 +38,7 @@ model Hero {
   id          Int    @id @default(autoincrement())
   name        String 
   abilities   Ability[] 
-  builds   Build[] 
+  builds      Build[] 
 }
 
 model Build {
@@ -45,5 +46,7 @@ model Build {
   name          String 
   heroId        Int
   hero          Hero   @relation(fields: [heroId], references: [id])
+  userId        Int    @default(1) 
+  user          User   @relation(fields: [userId], references: [id])
   abilityOrder  String[]
 }
