@@ -38,9 +38,6 @@ export const action = async ({ request }: ActionArgs) => {
   }
   const hash = await bcrypt.hash(password, 10)
 
-  console.log("password", password)
-  console.log("hash", hash)
-
   userSchema.parse({
     firstname,
     lastname,
