@@ -11,6 +11,8 @@ model Role {
   id    Int    @id @default(autoincrement())
   name  String @unique
   users User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model User {
@@ -23,6 +25,8 @@ model User {
   role      Role   @relation(fields: [roleId], references: [id])
   builds    Build[]
   password  UserPassword?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 
@@ -40,7 +44,9 @@ model Hero {
   id          Int    @id @default(autoincrement())
   name        String 
   abilities   Ability[] 
-  builds      Build[] 
+  builds      Build[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) 
 }
 
 model Build {
@@ -51,6 +57,8 @@ model Build {
   userId        Int    @default(1) 
   user          User   @relation(fields: [userId], references: [id])
   abilityOrder  String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model UserPassword {
