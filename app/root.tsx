@@ -1,37 +1,37 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node"
 import {
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration
-} from "@remix-run/react";
-import styles from "./styles/app.css";
+  ScrollRestoration,
+} from "@remix-run/react"
+import styles from "./styles/app.css"
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "New Remix App",
-  viewport: "width=device-width,initial-scale=1"
-});
+  viewport: "width=device-width,initial-scale=1",
+})
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: styles }];
-};
+  return [{ rel: "stylesheet", href: styles }]
+}
 
 export default function App() {
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
         <Meta />
         <Links />
       </head>
-      <body className='w-screen'>
+      <body className="w-screen bg-neutral-50 ">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
     </html>
-  );
+  )
 }
