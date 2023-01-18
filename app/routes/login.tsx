@@ -5,7 +5,11 @@ import RequiredLabel from "~/components/RequiredLabel"
 import { prisma } from "~/utils/prisma.server"
 import bcrypt from "bcryptjs"
 import Input from "~/components/Input"
-import { EMAIL_MAX_LENGTH, EMAIL_MIN_LENGTH } from "~/utils/user.server"
+import {
+  USERNAME_MAX_LENGTH,
+  USERNAME_MIN_LENGTH,
+  userSchema,
+} from "~/utils/user.server"
 import PasswordInput from "~/components/PasswordInput"
 import Button from "~/components/Button"
 import { createUserSession } from "~/utils/session.server"
@@ -14,12 +18,17 @@ export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
 
-  const email = data.email.toString()
+  const username = data.username.toString()
   const password = data.password.toString()
+
+  userSchema.parse({
+    username,
+    password,
+  })
 
   const user = await prisma.user.findFirst({
     where: {
-      email: email,
+      username,
     },
     include: {
       password: {
@@ -29,8 +38,6 @@ export const action = async ({ request }: ActionArgs) => {
       },
     },
   })
-
-  console.log(user)
 
   const errorMessage = `Email or password incorrect`
   if (!user) {
@@ -50,7 +57,7 @@ export const action = async ({ request }: ActionArgs) => {
     }
   }
 
-  return createUserSession(user.id.toString(), `/users/${user.id}`)
+  return createUserSession(user.userId, `/users/${user.username}`)
 }
 export default function Login() {
   const { state } = useTransition()
@@ -69,22 +76,19 @@ export default function Login() {
               {actionData?.message}
             </div>
           ) : null}
-          <RequiredLabel htmlFor="email">Email</RequiredLabel>
+          <RequiredLabel htmlFor="username">Username</RequiredLabel>
           <Input
-            type="email"
-            name="email"
-            id="email"
-            minLength={EMAIL_MIN_LENGTH}
-            maxLength={EMAIL_MAX_LENGTH}
+            type="text"
+            name="username"
+            id="username"
+            minLength={USERNAME_MIN_LENGTH}
+            maxLength={USERNAME_MAX_LENGTH}
             required
           />
           <RequiredLabel htmlFor="password">Password</RequiredLabel>
           <PasswordInput />
           <div className="flex items-baseline gap-2">
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="p-2 rounded bg-indigo-500 text-white mt-2 disabled:opacity-30 transition shadow">
+            <Button type="submit" disabled={isSubmitting}>
               Login
             </Button>
             <Link to={"/register"} className="text-indigo-500 underline">

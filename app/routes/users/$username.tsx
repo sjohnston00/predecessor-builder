@@ -2,22 +2,19 @@ import React from "react"
 import type { LoaderArgs } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { prisma } from "~/utils/prisma.server"
-import { getUserId } from "~/utils/session.server"
 
 export const loader = async ({ params, request }: LoaderArgs) => {
-  const loggedInUserId = await getUserId(request)
+  const { username } = params
 
-  const { userId } = params
-
-  if (!userId) {
-    throw new Response(`Couldn't find user with ID "${params.userId}"`, {
+  if (!username) {
+    throw new Response(`Couldn't find user with username "${username}"`, {
       status: 404,
     })
   }
 
   const user = await prisma.user.findFirst({
     where: {
-      id: userId,
+      username,
     },
     include: {
       role: true,

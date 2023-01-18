@@ -12,6 +12,7 @@
 - [ ] Builds with no userId will be "Anonymous"
 - [ ] Builds can have likes, comments and a description
 - [ ] Comments on a build can only be made by authenticated users
+- [ ] If user is already logged in on and goes to the login page, redirect them to '/' or whatever '?redirectTo' params maps to
 
 # Welcome to Remix!
 

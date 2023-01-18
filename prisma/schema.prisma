@@ -19,19 +19,17 @@ model Role {
 }
 
 model User {
-  userId    String           @id @default(cuid())
-  firstname String
-  lastname  String
-  age       Int
-  email     String        @unique
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @default(now())
-  roleId    String
-  role      Role          @relation(fields: [roleId], references: [roleId])
-  password  UserPassword?
-  builds    Build[]
+  userId      String        @id @default(cuid())
+  username    String        @unique
+  email       String?       @unique
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now())
+  roleId      String
+  role        Role          @relation(fields: [roleId], references: [roleId])
+  password    UserPassword?
+  builds      Build[]
   comments    Comment[]
-  likes     Like[]
+  likes       Like[]
 
   @@map("users")
   @@index([userId, email, roleId])
@@ -51,8 +49,8 @@ model Ability {
 }
 
 model Hero {
-  heroId    String       @id @default(cuid())
-  name      String
+  heroId    String    @id @default(cuid())
+  name      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now())
   abilities Ability[]
@@ -80,10 +78,9 @@ model Build {
 }
 
 model UserPassword {
-  passwordId   String    @id @default(cuid())
+  userId       String    @id
   passwordHash String
-  userId       String    @unique
-  user         User   @relation(fields: [userId], references: [userId])
+  user         User      @relation(fields: [userId], references: [userId])  
 
   @@map("userPasswords")
   @@index([userId])
