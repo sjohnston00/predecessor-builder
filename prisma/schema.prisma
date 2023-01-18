@@ -51,13 +51,13 @@ model Hero {
 model Build {
   id           Int      @id @default(autoincrement())
   name         String
-  heroId       Int
   abilityOrder String[]
-  userId       Int      @default(1)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
+  heroId       Int
   hero         Hero     @relation(fields: [heroId], references: [id])
-  user         User     @relation(fields: [userId], references: [id])
+  userId       Int?
+  user         User?    @relation(fields: [userId], references: [id])
 }
 
 model UserPassword {
