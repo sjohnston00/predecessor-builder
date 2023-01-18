@@ -2,8 +2,12 @@ import React from "react"
 import type { LoaderArgs } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { prisma } from "~/utils/prisma.server"
+import { getUserId } from "~/utils/session.server"
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderArgs) => {
+  const loggedInUserId = await getUserId(request)
+
+  console.log(loggedInUserId)
   const userId = Number(params.userId)
 
   if (!userId) {
