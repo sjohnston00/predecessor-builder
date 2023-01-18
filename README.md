@@ -8,6 +8,10 @@
 - [ ] Make users sign up using username, password only
 - [ ] Remove age, firstname and lastname fields from DB
 - [ ] Add authentication and authorization function that allow protected routes
+- [ ] Builds can be made by non-logged in users (remove the required userId on build schema)
+- [ ] Builds with no userId will be "Anonymous"
+- [ ] Builds can have likes, comments and a description
+- [ ] Comments on a build can only be made by authenticated users
 
 # Welcome to Remix!
 
