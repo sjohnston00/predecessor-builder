@@ -8,61 +8,106 @@ datasource db {
 }
 
 model Role {
-  id        Int      @id @default(autoincrement())
+  roleId    String   @id @default(cuid())
   name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   users     User[]
+
+  @@map("roles")
+  @@index([roleId])
 }
 
 model User {
-  id        Int           @id @default(autoincrement())
+  userId    String           @id @default(cuid())
   firstname String
   lastname  String
   age       Int
   email     String        @unique
-  roleId    Int           @default(1)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @default(now())
-  builds    Build[]
-  role      Role          @relation(fields: [roleId], references: [id])
+  roleId    String
+  role      Role          @relation(fields: [roleId], references: [roleId])
   password  UserPassword?
+  builds    Build[]
+  comments    Comment[]
+  likes     Like[]
+
+  @@map("users")
+  @@index([userId, email, roleId])
 }
 
 model Ability {
-  id          Int    @id @default(autoincrement())
+  abilityId   String    @id @default(cuid())
   name        String
   mana        Int
   description Int
   key         String
-  heroId      Int
-  hero        Hero   @relation(fields: [heroId], references: [id])
+  heroId      String
+  hero        Hero   @relation(fields: [heroId], references: [heroId])
+
+  @@map("abilities")
+  @@index([abilityId, heroId])
 }
 
 model Hero {
-  id        Int       @id @default(autoincrement())
+  heroId    String       @id @default(cuid())
   name      String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now())
   abilities Ability[]
   builds    Build[]
+
+  @@map("heroes")
+  @@index([name, heroId])
 }
 
 model Build {
-  id           Int      @id @default(autoincrement())
+  buildId      String      @id @default(cuid())
   name         String
   abilityOrder String[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
-  heroId       Int
-  hero         Hero     @relation(fields: [heroId], references: [id])
-  userId       Int?
-  user         User?    @relation(fields: [userId], references: [id])
+  heroId       String
+  hero         Hero     @relation(fields: [heroId], references: [heroId])
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [userId])
+  comments     Comment[]
+  likes        Like[]
+
+  @@map("builds")
+  @@index([userId, buildId, heroId, name])
 }
 
 model UserPassword {
-  passwordId   Int    @id @default(autoincrement())
-  userId       Int    @unique
+  passwordId   String    @id @default(cuid())
   passwordHash String
-  user         User   @relation(fields: [userId], references: [id])
+  userId       String    @unique
+  user         User   @relation(fields: [userId], references: [userId])
+
+  @@map("userPasswords")
+  @@index([userId])
+}
+
+model Comment {
+  commentId    String   @id @default(cuid())
+  content      String
+  userId       String
+  user         User     @relation(fields: [userId], references: [userId])
+  buildId      String
+  build        Build    @relation(fields: [buildId], references: [buildId])
+
+  @@map("comments")
+  @@index([userId, buildId])
+}
+
+model Like {
+  likeId       String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [userId])
+  buildId      String
+  build        Build    @relation(fields: [buildId], references: [buildId])
+
+  @@map("likes")
+  @@index([userId, buildId])
 }

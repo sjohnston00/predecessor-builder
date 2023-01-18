@@ -7,8 +7,7 @@ import { getUserId } from "~/utils/session.server"
 export const loader = async ({ params, request }: LoaderArgs) => {
   const loggedInUserId = await getUserId(request)
 
-  console.log(loggedInUserId)
-  const userId = Number(params.userId)
+  const { userId } = params
 
   if (!userId) {
     throw new Response(`Couldn't find user with ID "${params.userId}"`, {
