@@ -12,6 +12,8 @@ import {
 import NumberCheckbox from "~/components/NumberCheckbox";
 import { getUserId } from "~/utils/session.server";
 import Input from "~/components/Input";
+import Select from "~/components/Select";
+import Heading from "~/components/Heading";
 
 export const loader = async () => {
   const heroes = await prisma.hero.findMany();
@@ -131,27 +133,33 @@ export default function NewBuild() {
   return (
     <>
       <div className='flex w-fit m-auto flex-col justify-center items-center'>
-        <h1 className='text-5xl mb-4 font-bold tracking-wide self-start'>
+        <Heading type='h1' className='mb-4 self-start'>
           New Build
-        </h1>
+        </Heading>
         <Form method='post'>
           <div className='self-start mb-4'>
             <label htmlFor='name' className='block'>
               Build Name
             </label>
-            <Input type='text' name='name' id='name' ref={buildNameRef} />
+            <Input
+              type='text'
+              name='name'
+              id='name'
+              ref={buildNameRef}
+              required
+            />
           </div>
           <div className='self-start mb-4'>
             <label htmlFor='hero' className='block'>
               Hero
             </label>
-            <select name='hero' id='hero' className='p-2 border'>
+            <Select name='hero' id='hero' required>
               {heroes.map((hero) => (
                 <option key={hero.name} value={hero.name}>
                   {hero.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <h2 className='text-3xl mb-4 font-bold tracking-wide self-start'>
             Skill Order
