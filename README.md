@@ -5,8 +5,8 @@
 - [ ] fix `<NumberCheckbox/>` when setting toggled: false, when the ability has already been maxed out, this show an error message and doesn't untoggled the skill point, so you're stuck at this point
 - [x] Move new build page to `/builds/new` route
 - [ ] Add `backspace` functionality on the skill order section
-- [ ] Make users sign up using username, password only
-- [ ] Remove age, firstname and lastname fields from DB
+- [x] Make users sign up using username, password only
+- [x] Remove age, firstname and lastname fields from DB
 - [ ] Add authentication and authorization function that allow protected routes
 - [ ] Builds can be made by non-logged in users (remove the required userId on build schema)
 - [ ] Builds with no userId will be "Anonymous"
