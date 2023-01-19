@@ -14,6 +14,9 @@
 - [ ] Comments on a build can only be made by authenticated users
 - [x] If user is already logged in on and goes to the login page, redirect them to `/` or whatever `?redirectTo` params maps to
 - [x] Add logout function to destroy the user session and redirect to `/login` or `?redirectTo` params
+- [ ] Be able to load a build from DB and load the skill tree
+- [ ] Load the users builds when on `/users/$username` route
+- [ ] Fix `/builds/new` create build in prisma function
 
 # Welcome to Remix!
 
