@@ -69,7 +69,7 @@ export default function Login() {
       <Form
         method="post"
         className="flex flex-col justify-center items-center h-screen">
-        <div className="w-72">
+        <div className="sm:w-80 md:w-96">
           <h1 className="text-5xl mb-4 font-bold tracking-wide">Login</h1>
           {actionData?.message ? (
             <div className="text-sm px-2 py-3 bg-red-500 rounded text-white mb-2">
