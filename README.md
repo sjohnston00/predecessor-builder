@@ -17,6 +17,9 @@
 - [ ] Be able to load a build from DB and load the skill tree
 - [ ] Load the users builds when on `/users/$username` route
 - [ ] Fix `/builds/new` create build in prisma function
+- [x] Fix `/builds/new` skill order react-use-keypress being triggered when typing build name
+- [ ] Fix `/builds/new` skill order react-use-keypress being triggered when using general keyboard shortcuts such as Ctrl + T will prevent new tab opening and also triger react-use-keypress (if we can't fix this, we may want to resort to just using a more simple keyboard navigation with ArrowKeys on the grid)
+- [ ] Create `<Select/>` component that has similar styles to `<Input/>`
 
 # Welcome to Remix!
 
