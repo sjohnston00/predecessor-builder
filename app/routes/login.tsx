@@ -83,10 +83,11 @@ export default function Login() {
             id="username"
             minLength={USERNAME_MIN_LENGTH}
             maxLength={USERNAME_MAX_LENGTH}
+            autoComplete="username"
             required
           />
           <RequiredLabel htmlFor="password">Password</RequiredLabel>
-          <PasswordInput />
+          <PasswordInput autoComplete="current-password" />
           <div className="flex items-baseline gap-2">
             <Button type="submit" disabled={isSubmitting}>
               Login

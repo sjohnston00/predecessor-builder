@@ -4,12 +4,8 @@ import { Form, Link, useActionData, useTransition } from "@remix-run/react"
 import RequiredLabel from "~/components/RequiredLabel"
 import { prisma } from "~/utils/prisma.server"
 import {
-  AGE_MAX,
-  AGE_MIN,
-  EMAIL_MAX_LENGTH,
-  EMAIL_MIN_LENGTH,
-  NAME_MAX_LENGTH,
-  NAME_MIN_LENGTH,
+  USERNAME_MAX_LENGTH,
+  USERNAME_MIN_LENGTH,
   userSchema,
   validatePassword,
 } from "~/utils/user.server"
@@ -23,32 +19,27 @@ export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
 
-  const firstname = data.firstname.toString()
-  const lastname = data.lastname.toString()
-  const email = data.email.toString()
-  const age = Number(data.age.toString())
+  const username = data.username.toString()
   const password = data.password.toString()
 
   const validPassword = validatePassword(password)
+
+  userSchema.parse({
+    username,
+    password,
+  })
 
   if (!validPassword) {
     return {
       message: `Password must contain: Lowercase, Uppercase, Special Characters and a Number`,
     }
   }
-  const hash = await bcrypt.hash(password, 10)
 
-  userSchema.parse({
-    firstname,
-    lastname,
-    email,
-    age,
-    password,
-  })
+  const passwordHash = await bcrypt.hash(password, 10)
 
   const userExists = await prisma.user.findFirst({
     where: {
-      email: email,
+      username,
     },
   })
 
@@ -58,26 +49,25 @@ export const action = async ({ request }: ActionArgs) => {
     }
   }
 
-  const { id } = await prisma.user.create({
+  const { userId } = await prisma.user.create({
     data: {
-      email,
-      firstname,
-      lastname,
-      age: age,
-    },
-    select: {
-      id: true,
+      username: username,
+      role: {
+        connect: {
+          name: "User",
+        },
+      },
     },
   })
 
   await prisma.userPassword.create({
     data: {
-      passwordHash: hash,
-      userId: id,
+      passwordHash,
+      userId,
     },
   })
 
-  return createUserSession(id.toString())
+  return createUserSession(userId, `/users/${username}`)
 }
 
 export default function Register() {
@@ -97,51 +87,17 @@ export default function Register() {
               {actionData?.message}
             </div>
           ) : null}
-          <div className="flex gap-3">
-            <div className="w-full">
-              <RequiredLabel htmlFor="firstname">First Name</RequiredLabel>
-              <Input
-                type="text"
-                name="firstname"
-                id="firstname"
-                minLength={NAME_MIN_LENGTH}
-                maxLength={NAME_MAX_LENGTH}
-                required
-              />
-            </div>
-
-            <div className="w-full">
-              <RequiredLabel htmlFor="lastname">Last Name</RequiredLabel>
-              <Input
-                type="text"
-                name="lastname"
-                id="lastname"
-                minLength={NAME_MIN_LENGTH}
-                maxLength={NAME_MAX_LENGTH}
-                required
-              />
-            </div>
-          </div>
-          <RequiredLabel htmlFor="age">Age</RequiredLabel>
+          <RequiredLabel htmlFor="username">Username</RequiredLabel>
           <Input
-            type="number"
-            name="age"
-            id="age"
-            min={AGE_MIN}
-            max={AGE_MAX}
-            required
-          />
-          <RequiredLabel htmlFor="email">Email</RequiredLabel>
-          <Input
-            type="email"
-            name="email"
-            id="email"
-            minLength={EMAIL_MIN_LENGTH}
-            maxLength={EMAIL_MAX_LENGTH}
+            type="username"
+            name="username"
+            id="username"
+            minLength={USERNAME_MIN_LENGTH}
+            maxLength={USERNAME_MAX_LENGTH}
             required
           />
           <RequiredLabel htmlFor="password">New Password</RequiredLabel>
-          <PasswordInput />
+          <PasswordInput autoComplete="new-password" />
 
           <div className="flex items-baseline gap-2">
             <Button type="submit" disabled={isSubmitting}>
