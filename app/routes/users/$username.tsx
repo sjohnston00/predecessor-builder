@@ -1,7 +1,8 @@
 import React from "react"
 import type { LoaderArgs } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
+import { Form, useLoaderData } from "@remix-run/react"
 import { prisma } from "~/utils/prisma.server"
+import Button from "~/components/Button"
 
 export const loader = async ({ params, request }: LoaderArgs) => {
   const { username } = params
@@ -39,5 +40,12 @@ export default function UserId() {
   // const {age, email, firstname, lastname, role: {name: roleName}} = useLoaderData<typeof loader>()
   const user = useLoaderData<typeof loader>()
 
-  return <pre>{JSON.stringify(user, null, 2)}</pre>
+  return (
+    <div className="px-1">
+      <pre>{JSON.stringify(user, null, 2)}</pre>
+      <Form method="post" action="/logout">
+        <Button type="submit">Logout</Button>
+      </Form>
+    </div>
+  )
 }

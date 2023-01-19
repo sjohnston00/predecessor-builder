@@ -1,5 +1,6 @@
 import React from "react"
-import type { ActionArgs } from "@remix-run/node"
+import type { ActionArgs, LoaderArgs } from "@remix-run/node"
+import { redirect } from "@remix-run/node"
 import { Form, Link, useActionData, useTransition } from "@remix-run/react"
 import RequiredLabel from "~/components/RequiredLabel"
 import { prisma } from "~/utils/prisma.server"
@@ -12,7 +13,15 @@ import {
 } from "~/utils/user.server"
 import PasswordInput from "~/components/PasswordInput"
 import Button from "~/components/Button"
-import { createUserSession } from "~/utils/session.server"
+import { createUserSession, getUser } from "~/utils/session.server"
+
+export const loader = async ({ request }: LoaderArgs) => {
+  const loggedInUser = await getUser(request)
+  if (loggedInUser) {
+    return redirect(`/users/${loggedInUser.username}`)
+  }
+  return null
+}
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
