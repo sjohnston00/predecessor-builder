@@ -4,9 +4,11 @@ import { Form, useLoaderData, Link } from "@remix-run/react";
 import { prisma } from "~/utils/prisma.server";
 import Button from "~/components/Button";
 import Heading from "~/components/Heading";
+import { getUserId } from "~/utils/session.server";
 
 export const loader = async ({ params, request }: LoaderArgs) => {
   const { username } = params;
+  const loggedInUserId = await getUserId(request);
 
   if (!username) {
     throw new Response(`Couldn't find user with username "${username}"`, {
@@ -34,7 +36,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
     });
   }
 
-  return user;
+  return { ...user, isLoggedInUser: user.userId === loggedInUserId };
 };
 
 export default function UserId() {
