@@ -14,7 +14,7 @@ export default function Index() {
       <h1 className='text-5xl'>Heroes</h1>
       <ul className='mt-4'>
         {heroes.map((hero) => (
-          <li key={hero.id} className='flex flex-col'>
+          <li key={hero.heroId} className='flex flex-col'>
             <Link to={`/heroes/${hero.name}`}>{hero.name}</Link>
             <Link
               to={`/builds/${hero.name}`}

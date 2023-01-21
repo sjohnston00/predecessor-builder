@@ -1,7 +1,8 @@
 import React from "react";
-import { ActionArgs, redirect } from "@remix-run/node";
+import type { ActionArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import type { LoaderArgs } from "@remix-run/node";
-import { Form, Link, useLoaderData, useTransition } from "@remix-run/react";
+import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { prisma } from "~/utils/prisma.server";
 import Textarea from "~/components/Textarea";
 import Button from "~/components/Button";

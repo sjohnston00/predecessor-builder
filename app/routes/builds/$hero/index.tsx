@@ -30,8 +30,8 @@ export default function Hero() {
       <h1 className='text-5xl'>Builds for {heroName}</h1>
       <ul>
         {builds.map((build) => (
-          <li key={`build-${build.id}`}>
-            <Link to={`/builds/${heroName}/${build.id}`}>{build.name}</Link>
+          <li key={`build-${build.buildId}`}>
+            <Link to={`/builds/${heroName}/${build.name}`}>{build.name}</Link>
           </li>
         ))}
       </ul>

@@ -25,12 +25,11 @@ export default function Hero() {
       <h1 className='text-5xl'>Heroes</h1>
       <h2 className='text-4xl'>{hero?.name}</h2>
 
-      <p>Hero: ID: {hero?.id}</p>
       <h2 className='text-4xl'>Builds</h2>
       <ul className='mt-4'>
         {hero.builds.map((build) => (
-          <li key={`${hero.name}-build-${build.id}`}>
-            <Link to={`/builds/${hero.name}/${build.id}`}>{build.name}</Link>
+          <li key={`${hero.name}-build-${build.buildId}`}>
+            <Link to={`/builds/${hero.name}/${build.name}`}>{build.name}</Link>
           </li>
         ))}
       </ul>
@@ -38,7 +37,9 @@ export default function Hero() {
       <h2 className='text-4xl'>Abilites</h2>
       <ul className='mt-4'>
         {hero.abilities.map((ability) => (
-          <li key={`${hero.name}-ability-${ability.id}`}>{ability.name}</li>
+          <li key={`${hero.name}-ability-${ability.abilityId}`}>
+            {ability.name}
+          </li>
         ))}
       </ul>
       <Link
