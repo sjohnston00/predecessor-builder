@@ -29,8 +29,6 @@ export const action = async ({ request }: ActionArgs) => {
   const heroName = data.hero.toString();
   const buildName = data.name.toString();
   const loggedInUserId = await getUserId(request);
-  console.log(loggedInUserId);
-
   const hero = await prisma.hero.findFirst({
     where: {
       name: {
@@ -50,11 +48,12 @@ export const action = async ({ request }: ActionArgs) => {
     data: {
       name: buildName || "No Name",
       abilityOrder: levels,
-      heroId: hero.id
+      heroId: hero.heroId,
+      userId: loggedInUserId
     }
   });
 
-  throw redirect(`/builds/${heroName}/${newBuild.id}`);
+  throw redirect(`/builds/${heroName}/${newBuild.name}`);
 };
 
 export default function NewBuild() {
