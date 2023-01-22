@@ -66,6 +66,7 @@ model Build {
   abilityOrder String[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
+  role         String
   heroId       String
   hero         Hero     @relation(fields: [heroId], references: [heroId])
   userId       String?

@@ -1,5 +1,6 @@
 import { Link, useLoaderData } from "@remix-run/react";
 import React from "react";
+import Container from "~/components/Container";
 import Heading from "~/components/Heading";
 import { getAllHeroes } from "~/utils/heroes.server";
 
@@ -11,20 +12,18 @@ export const loader = async () => {
 export default function Index() {
   const { heroes } = useLoaderData<typeof loader>();
   return (
-    <div className='px-1'>
+    <Container>
       <Heading type='h1'>Heroes</Heading>
-      <ul className='mt-4'>
-        {heroes.map((hero) => (
-          <li key={hero.heroId} className='flex flex-col'>
-            <Link to={`/heroes/${hero.name}`}>{hero.name}</Link>
-            <Link
-              to={`/builds/${hero.name}`}
-              className='text-sm text-slate-500 inline'>
-              Builds: {hero.builds.length}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {heroes.map((hero) => (
+        <div key={hero.heroId} className='flex justify-between '>
+          <Link to={`/heroes/${hero.name}`}>{hero.name}</Link>
+          <Link
+            to={`/builds/${hero.name}`}
+            className='text-sm text-slate-500 inline'>
+            Builds: {hero.builds.length}
+          </Link>
+        </div>
+      ))}
 
       <div className='flex items-baseline gap-2'>
         <Link
@@ -33,6 +32,6 @@ export default function Index() {
           New
         </Link>
       </div>
-    </div>
+    </Container>
   );
 }

@@ -23,25 +23,33 @@ export default function Index() {
   return (
     <div className='px-1'>
       <Heading type='h1'>All builds</Heading>
-      <ul>
+      <div className='flex flex-col gap-2'>
         {builds.map((build) => (
-          <li key={`build-${build.buildId}`} className='flex flex-col'>
-            <Link to={`/builds/${build.hero.name}/${build.name}`}>
+          <div
+            key={`build-${build.buildId}`}
+            className='flex justify-between h-20 items-center'>
+            <Link
+              to={`/builds/${build.hero.name}/${build.name}`}
+              className='p-1'>
               {build.name}
             </Link>
-            <Link
-              to={`/heroes/${build.hero.name}`}
-              className='text-sm text-slate-500 inline'>
-              Hero: {build.hero.name}
-            </Link>
-            <Link
-              to={build.user?.username ? `/users/${build.user?.username}` : "#"}
-              className='text-sm text-slate-500 inline'>
-              {build.user?.username || "Anonymous"}
-            </Link>
-          </li>
+            <div className='flex flex-col'>
+              <Link
+                to={`/builds/${build.hero.name}`}
+                className='text-sm text-slate-500 inline p-1'>
+                Hero: {build.hero.name}
+              </Link>
+              <Link
+                to={
+                  build.user?.username ? `/users/${build.user?.username}` : "#"
+                }
+                className='text-sm text-slate-500 inline p-1'>
+                {build.user?.username || "Anonymous"}
+              </Link>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
       <LinkButton to={"/builds/new"}>New</LinkButton>
     </div>
   );

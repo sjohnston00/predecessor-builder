@@ -15,6 +15,7 @@ import PasswordInput from "~/components/PasswordInput";
 import Button from "~/components/Button";
 import { createUserSession, getUser } from "~/utils/session.server";
 import Heading from "~/components/Heading";
+import Container from "~/components/Container";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const loggedInUser = await getUser(request);
@@ -75,43 +76,41 @@ export default function Login() {
 
   const isSubmitting = state === "submitting";
   return (
-    <>
-      <Form
-        method='post'
-        className='flex flex-col justify-center items-center h-screen'>
-        <div className='sm:w-80 md:w-96'>
-          <Heading type='h1'>Login</Heading>
-          {actionData?.message ? (
-            <div className='text-sm px-2 py-3 bg-red-500 rounded text-white mb-2'>
-              {actionData?.message}
-            </div>
-          ) : null}
-          <Label htmlFor='username' required>
-            Username
-          </Label>
-          <Input
-            type='text'
-            name='username'
-            id='username'
-            minLength={USERNAME_MIN_LENGTH}
-            maxLength={USERNAME_MAX_LENGTH}
-            autoComplete='username'
-            required
-          />
-          <Label htmlFor='password' required>
-            Password
-          </Label>
-          <PasswordInput autoComplete='current-password' />
-          <div className='flex items-baseline gap-2'>
-            <Button type='submit' disabled={isSubmitting}>
-              Login
-            </Button>
-            <Link to={"/register"} className='text-indigo-500 underline'>
-              Not a member? Register
-            </Link>
+    <Container>
+      <Form method='post' className='flex flex-col justify-center h-screen'>
+        <Heading type='h1' className='mb-2'>
+          Login
+        </Heading>
+        {actionData?.message ? (
+          <div className='text-sm px-2 py-3 bg-red-500 rounded text-white mb-2'>
+            {actionData?.message}
           </div>
+        ) : null}
+        <Label htmlFor='username' required>
+          Username
+        </Label>
+        <Input
+          type='text'
+          name='username'
+          id='username'
+          minLength={USERNAME_MIN_LENGTH}
+          maxLength={USERNAME_MAX_LENGTH}
+          autoComplete='username'
+          required
+        />
+        <Label htmlFor='password' required>
+          Password
+        </Label>
+        <PasswordInput autoComplete='current-password' />
+        <div className='flex items-baseline gap-2'>
+          <Button type='submit' disabled={isSubmitting}>
+            Login
+          </Button>
+          <Link to={"/register"} className='text-indigo-500 underline'>
+            Not a member? Register
+          </Link>
         </div>
       </Form>
-    </>
+    </Container>
   );
 }
