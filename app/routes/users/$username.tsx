@@ -36,12 +36,12 @@ export const loader = async ({ params, request }: LoaderArgs) => {
     });
   }
 
-  return { ...user, isLoggedInUser: user.userId === loggedInUserId };
+  return { user, isLoggedInUser: user.userId === loggedInUserId };
 };
 
 export default function UserId() {
   // const {age, email, firstname, lastname, role: {name: roleName}} = useLoaderData<typeof loader>()
-  const user = useLoaderData<typeof loader>();
+  const { user, isLoggedInUser } = useLoaderData<typeof loader>();
 
   return (
     <div className='px-1'>
@@ -55,9 +55,11 @@ export default function UserId() {
         </div>
       ))}
       <pre>{JSON.stringify(user, null, 2)}</pre>
-      <Form method='post' action='/logout'>
-        <Button type='submit'>Logout</Button>
-      </Form>
+      {isLoggedInUser ? (
+        <Form method='post' action='/logout'>
+          <Button type='submit'>Logout</Button>
+        </Form>
+      ) : null}
     </div>
   );
 }

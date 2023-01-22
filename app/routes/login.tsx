@@ -106,7 +106,7 @@ export default function Login() {
           <Button type='submit' disabled={isSubmitting}>
             Login
           </Button>
-          <Link to={"/register"} className='text-indigo-500 underline'>
+          <Link to={"/register"} className='text-indigo-500 underline p-1'>
             Not a member? Register
           </Link>
         </div>

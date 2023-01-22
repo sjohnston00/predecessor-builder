@@ -30,7 +30,20 @@ export default function Navbar({ user }: Props) {
               </Link>
             </li>
           </div>
-        ) : null}
+        ) : (
+          <div className='flex gap-2'>
+            <li>
+              <Link className='p-1' to={`/register`}>
+                Register
+              </Link>
+            </li>
+            <li>
+              <Link className='p-1' to={`/login`}>
+                Login
+              </Link>
+            </li>
+          </div>
+        )}
       </ul>
     </nav>
   );

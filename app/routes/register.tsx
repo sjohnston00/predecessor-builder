@@ -117,7 +117,7 @@ export default function Register() {
           <Button type='submit' disabled={isSubmitting}>
             Register
           </Button>
-          <Link to={"/login"} className='text-indigo-500 underline'>
+          <Link to={"/login"} className='text-indigo-500 underline p-1'>
             Already a member? Login
           </Link>
         </div>
