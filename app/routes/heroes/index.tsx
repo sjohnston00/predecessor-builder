@@ -1,5 +1,6 @@
 import { Link, useLoaderData } from "@remix-run/react";
 import React from "react";
+import Heading from "~/components/Heading";
 import { getAllHeroes } from "~/utils/heroes.server";
 
 export const loader = async () => {
@@ -11,7 +12,7 @@ export default function Index() {
   const { heroes } = useLoaderData<typeof loader>();
   return (
     <div className='px-1'>
-      <h1 className='text-5xl'>Heroes</h1>
+      <Heading type='h1'>Heroes</Heading>
       <ul className='mt-4'>
         {heroes.map((hero) => (
           <li key={hero.heroId} className='flex flex-col'>

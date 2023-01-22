@@ -12,6 +12,7 @@ import LinkButton from "~/components/LinkButton";
 
 export const loader = async ({ params, request }: LoaderArgs) => {
   const buildName = params.buildName;
+  const hero = params.hero;
   const loggedInUserId = await getUserId(request);
 
   if (!buildName) throw redirect("/builds/");
@@ -48,7 +49,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
 
   if (!build) throw redirect("/builds/");
 
-  return { loggedInUserHasBuildLike, isLoggedInUsersBuild, build };
+  return { loggedInUserHasBuildLike, isLoggedInUsersBuild, build, hero };
 };
 
 export const action = async ({ request }: ActionArgs) => {
@@ -91,12 +92,18 @@ export const action = async ({ request }: ActionArgs) => {
 };
 
 export default function BuildNumber() {
-  const { build, isLoggedInUsersBuild, loggedInUserHasBuildLike } =
+  const { build, isLoggedInUsersBuild, loggedInUserHasBuildLike, hero } =
     useLoaderData<typeof loader>();
   const { state } = useTransition();
   const isSubmitting = state === "submitting";
   return (
     <div className='px-1'>
+      <div className='flex gap-2'>
+        <LinkButton to={"/builds"}>All Builds</LinkButton>
+        <LinkButton to={`/builds/${hero}`} className='bg-blue-500'>
+          {hero} Builds
+        </LinkButton>
+      </div>
       <p>Hero: {build.hero.name}</p>
       <p>
         By: {build.user?.username ? `${build.user?.username}` : "Anonymous"}

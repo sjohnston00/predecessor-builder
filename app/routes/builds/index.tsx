@@ -1,12 +1,17 @@
 import React from "react";
 import { useLoaderData, Link } from "@remix-run/react";
 import { prisma } from "~/utils/prisma.server";
+import Heading from "~/components/Heading";
+import LinkButton from "~/components/LinkButton";
 
 export const loader = async () => {
   const builds = await prisma.build.findMany({
     include: {
       hero: true,
       user: true
+    },
+    orderBy: {
+      createdAt: "desc"
     }
   });
 
@@ -17,7 +22,7 @@ export default function Index() {
   const { builds } = useLoaderData<typeof loader>();
   return (
     <div className='px-1'>
-      <h1 className='text-5xl'>All builds</h1>
+      <Heading type='h1'>All builds</Heading>
       <ul>
         {builds.map((build) => (
           <li key={`build-${build.buildId}`} className='flex flex-col'>
@@ -37,6 +42,7 @@ export default function Index() {
           </li>
         ))}
       </ul>
+      <LinkButton to={"/builds/new"}>New</LinkButton>
     </div>
   );
 }

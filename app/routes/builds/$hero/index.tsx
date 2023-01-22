@@ -3,6 +3,8 @@ import { redirect } from "@remix-run/node";
 import type { LoaderArgs } from "@remix-run/node";
 import { useLoaderData, Link } from "@remix-run/react";
 import { prisma } from "~/utils/prisma.server";
+import Heading from "~/components/Heading";
+import LinkButton from "~/components/LinkButton";
 
 export const loader = async ({ params }: LoaderArgs) => {
   const heroName = params.hero as string;
@@ -15,6 +17,9 @@ export const loader = async ({ params }: LoaderArgs) => {
     },
     include: {
       hero: true
+    },
+    orderBy: {
+      createdAt: "desc"
     }
   });
 
@@ -27,7 +32,11 @@ export default function Hero() {
   const { builds, heroName } = useLoaderData<typeof loader>();
   return (
     <div>
-      <h1 className='text-5xl'>Builds for {heroName}</h1>
+      <Heading type='h1'>Builds for {heroName}</Heading>
+      <div className='flex gap-2'>
+        <LinkButton to={"/builds"}>All Builds</LinkButton>
+        <LinkButton to={`/heroes/${heroName}`}>{heroName} Info</LinkButton>
+      </div>
       <ul>
         {builds.map((build) => (
           <li key={`build-${build.buildId}`}>

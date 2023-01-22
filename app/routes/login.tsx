@@ -14,6 +14,7 @@ import {
 import PasswordInput from "~/components/PasswordInput";
 import Button from "~/components/Button";
 import { createUserSession, getUser } from "~/utils/session.server";
+import Heading from "~/components/Heading";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const loggedInUser = await getUser(request);
@@ -79,7 +80,7 @@ export default function Login() {
         method='post'
         className='flex flex-col justify-center items-center h-screen'>
         <div className='sm:w-80 md:w-96'>
-          <h1 className='text-5xl mb-4 font-bold tracking-wide'>Login</h1>
+          <Heading type='h1'>Login</Heading>
           {actionData?.message ? (
             <div className='text-sm px-2 py-3 bg-red-500 rounded text-white mb-2'>
               {actionData?.message}

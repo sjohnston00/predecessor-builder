@@ -3,6 +3,7 @@ import type { ActionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, Link } from "@remix-run/react";
 import { prisma } from "~/utils/prisma.server";
+import Heading from "~/components/Heading";
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
@@ -20,7 +21,7 @@ export const action = async ({ request }: ActionArgs) => {
 export default function NewHero() {
   return (
     <div className='px-1'>
-      <h1 className='text-5xl'>Heroes</h1>
+      <Heading type='h1'>Heroes</Heading>
       <Form method='post'>
         <div>
           <label htmlFor='name' className='block'>
