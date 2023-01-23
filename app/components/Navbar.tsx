@@ -10,7 +10,7 @@ type Props = {
 
 export default function Navbar({ user }: Props) {
   return (
-    <nav className="h-12 bg-indigo-500 text-white">
+    <nav className="h-12 bg-indigo-500 text-white font-semibold tracking-wider">
       <Container className="h-full">
         <ul className="flex h-full gap-2 justify-between items-center">
           <div className="flex items-center gap-2">
