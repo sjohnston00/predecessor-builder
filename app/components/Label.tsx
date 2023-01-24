@@ -1,18 +1,19 @@
-import React from "react";
+import React from "react"
 
 type RequiredLabelProps = { required?: boolean } & React.DetailedHTMLProps<
   React.LabelHTMLAttributes<HTMLLabelElement>,
   HTMLLabelElement
->;
+>
 
 export default function RequiredLabel({
   required = false,
+  className = "",
+  children,
   ...props
 }: RequiredLabelProps) {
-  const { children, className } = props;
   return (
-    <label {...props} className={`block mb-1 ${className}`}>
-      {children} {required ? <span className='text-red-400'>*</span> : null}
+    <label className={`block mb-1 ${className}`} {...props}>
+      {children} {required ? <span className="text-red-400">*</span> : null}
     </label>
-  );
+  )
 }

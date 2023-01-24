@@ -2,7 +2,7 @@ import React from "react"
 
 export default function Container({
   children,
-  className,
+  className = "",
   ...props
 }: React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
