@@ -23,6 +23,9 @@
 - [ ] Builds shouldn't be bound to just 1 hero, we can have a suggested heroes?, and a role?
 - [ ] Switch url scheme to have /builds/$buildName no /$hero needed
 - [ ] In the /builds route add a search form that allows the user to search for builds by Hero, Role and Name
+- [ ] Make buildNames unique in db
+- [ ] Save buildNames as normal strings
+- [ ] Make every build link url use '-' (dashes) instead of ' ' (spaces) e.g `href={/builds/${build.name.replaceAll(' ', '-)}}` (make sure to reverse this process when getting the build by build name e.g: `params.buildName.replaceAll('-', ' ')`
 
 # Welcome to Remix!
 
