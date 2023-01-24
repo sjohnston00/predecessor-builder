@@ -8,12 +8,12 @@ import { urlParametize } from "~/utils";
 export default function Items() {
   return (
     <Container>
-      <div className='flex flex-col gap-10'>
+      <div className='grid grid-cols-3 md:grid-cols-4 gap-4'>
         {items.map((item) => (
           <Link
             to={`/items/${urlParametize(item.name)}`}
             key={item.name}
-            className='flex gap-2 items-start'>
+            className='flex flex-col gap-2 items-center'>
             <img
               src={item.image}
               height={100}
@@ -21,13 +21,13 @@ export default function Items() {
               alt='item'
               className='self-center'
             />{" "}
+            <Heading type='h6'>{item.name}</Heading>
             <div className='item-description'>
-              <Heading type='h5'>{item.name}</Heading>
-              {item.descriptions?.map((desc, i) => (
+              {/* {item.descriptions?.map((desc, i) => (
                 <p key={`${item.name}-${desc.descriptionType}-${i}`}>
                   <b>{desc.descriptionType}:</b> {desc.description}
                 </p>
-              ))}
+              ))} */}
             </div>
           </Link>
         ))}
