@@ -26,6 +26,9 @@
 - [ ] Make buildNames unique in db
 - [ ] Save buildNames as normal strings
 - [ ] Make every build link url use '-' (dashes) instead of ' ' (spaces) e.g `href={/builds/${build.name.replaceAll(' ', '-)}}` (make sure to reverse this process when getting the build by build name e.g: `params.buildName.replaceAll('-', ' ')`
+- [x] Show all items page (include search)
+- [ ] Allow builds to include items (include situational items)
+- [ ] Items page, show build that include these items
 
 # Welcome to Remix!
 
