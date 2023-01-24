@@ -24,3 +24,7 @@ export function checkAbilityMaxed(ability: string, abilityCount: number) {
     (ability !== "r" && abilityCount >= 5)
   );
 }
+
+export function urlParametize(parameter: string) {
+  return parameter.toLowerCase().replaceAll(" ", "-");
+}
