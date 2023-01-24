@@ -76,8 +76,8 @@ export default function Login() {
 
   const isSubmitting = state === "submitting"
   return (
-    <Container>
-      <Form method="post" className="flex flex-col justify-center h-screen">
+    <Container className="mt-32">
+      <Form method="post" className="flex flex-col">
         <Heading type="h1" className="mb-2">
           Login
         </Heading>
