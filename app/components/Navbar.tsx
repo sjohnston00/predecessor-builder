@@ -1,58 +1,65 @@
-import React from "react"
-import type { User } from "@prisma/client"
-import { Form, Link } from "@remix-run/react"
-import Button from "./Button"
-import Container from "./Container"
+import React from "react";
+import type { User } from "@prisma/client";
+import { Form, Link } from "@remix-run/react";
+import Button from "./Button";
+import Container from "./Container";
 
 type Props = {
-  user: User | null
-}
+  user: User | null;
+};
 
 export default function Navbar({ user }: Props) {
   return (
-    <nav className="py-4 bg-indigo-500 text-white font-semibold tracking-wider mb-6">
+    <nav className='py-4 bg-indigo-500 text-white font-semibold tracking-wider mb-6'>
       <Container>
-        <ul className="flex flex-col md:flex-row gap-6 md:justify-between md:items-center">
-          <div className="flex flex-col md:flex-row md:items-center items-start gap-2">
+        <ul className='flex flex-col md:flex-row gap-6 md:justify-between md:items-center'>
+          <div className='flex flex-col md:flex-row md:items-center items-start gap-2'>
             <li>
-              <Link className="p-1" to={"/"}>
+              <Link className='p-1' to={"/"}>
                 Pred-Build
               </Link>
             </li>
             <li>
-              <Link className="p-1" to={"/heroes"}>
+              <Link className='p-1' to='/heroes'>
                 Heroes
               </Link>
             </li>
             <li>
-              <Link className="p-1" to={"/builds"}>
+              <Link className='p-1' to='/items'>
+                Items
+              </Link>
+            </li>
+            <li>
+              <Link className='p-1' to='/builds'>
                 Builds
               </Link>
             </li>
           </div>
-          <div className="flex flex-col md:flex-row md:items-center items-start gap-2">
+          <div className='flex flex-col md:flex-row md:items-center items-start gap-2'>
             {user ? (
               <>
                 <li>
-                  <Link className="p-1" to={`/users/${user.username}`}>
+                  <Link className='p-1' to={`/users/${user.username}`}>
                     My Account
                   </Link>
                 </li>
                 <li>
-                  <Form method="post" action="/logout">
-                    <Button type="submit">Logout</Button>
+                  <Form method='post' action='/logout'>
+                    <Button className='bg-neutral-800' type='submit'>
+                      Logout
+                    </Button>
                   </Form>
                 </li>
               </>
             ) : (
               <>
                 <li>
-                  <Link className="p-1" to={`/register`}>
+                  <Link className='p-1' to={`/register`}>
                     Register
                   </Link>
                 </li>
                 <li>
-                  <Link className="p-1" to={`/login`}>
+                  <Link className='p-1' to={`/login`}>
                     Login
                   </Link>
                 </li>
@@ -62,5 +69,5 @@ export default function Navbar({ user }: Props) {
         </ul>
       </Container>
     </nav>
-  )
+  );
 }

@@ -1,6 +1,7 @@
-import { LoaderArgs, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import React from "react";
+import type { LoaderArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import Container from "~/components/Container";
 import Heading from "~/components/Heading";
 import items from "~/items.json";
