@@ -16,10 +16,13 @@
 - [x] Add logout function to destroy the user session and redirect to `/login` or `?redirectTo` params
 - [ ] Be able to load a build from DB and load the skill tree
 - [ ] Load the users builds when on `/users/$username` route
-- [ ] Fix `/builds/new` create build in prisma function
+- [x] Fix `/builds/new` create build in prisma function
 - [x] Fix `/builds/new` skill order react-use-keypress being triggered when typing build name
 - [ ] Fix `/builds/new` skill order react-use-keypress being triggered when using general keyboard shortcuts such as Ctrl + T will prevent new tab opening and also triger react-use-keypress (if we can't fix this, we may want to resort to just using a more simple keyboard navigation with ArrowKeys on the grid)
-- [ ] Create `<Select/>` component that has similar styles to `<Input/>`
+- [x] Create `<Select/>` component that has similar styles to `<Input/>`
+- [ ] Builds shouldn't be bound to just 1 hero, we can have a suggested heroes?, and a role?
+- [ ] Switch url scheme to have /builds/$buildName no /$hero needed
+- [ ] In the /builds route add a search form that allows the user to search for builds by Hero, Role and Name
 
 # Welcome to Remix!
 

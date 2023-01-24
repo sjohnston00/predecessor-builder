@@ -67,8 +67,11 @@ export const action = async ({ request }: ActionArgs) => {
       message: errorMessage,
     }
   }
+  const url = new URL(request.url)
+  const redirectTo =
+    url.searchParams.get("redirectTo") || `/users/${user.username}`
 
-  return createUserSession(user.userId, `/users/${user.username}`)
+  return createUserSession(user.userId, redirectTo)
 }
 export default function Login() {
   const { state } = useTransition()
