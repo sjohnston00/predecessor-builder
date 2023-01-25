@@ -6,6 +6,7 @@ import Container from "~/components/Container";
 import Heading from "~/components/Heading";
 import items from "~/items.json";
 import LinkButton from "~/components/LinkButton";
+import type { Item } from "~/types/items.server";
 
 export const loader = async ({ params }: LoaderArgs) => {
   const item = items.filter(
@@ -14,7 +15,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       params.itemName?.toLowerCase().replaceAll("-", " ")
   )[0];
   if (!item) throw redirect("/items");
-  return item;
+  return item as Item;
 };
 
 export default function $itemName() {
@@ -56,7 +57,7 @@ export default function $itemName() {
         />
       </div>
       <div className='mt-4'>
-        {item.stack &&
+        {item.stats &&
           Object.entries(item.stats).map(([key, value], i) => (
             <p key={`${item.name}-stat-${key}-${i}`}>
               <span className='text-emerald-500 tracking-wide font-semibold mr-4'>
@@ -67,7 +68,7 @@ export default function $itemName() {
           ))}
       </div>
       <div className='mt-4'>
-        {item.descriptions.map((desc, i) => (
+        {item.descriptions?.map((desc, i) => (
           <p key={`${item.name}-${desc.descriptionType}-${i}`}>
             <span className='text-indigo-500 tracking-wide font-semibold'>
               {desc.descriptionType}:
