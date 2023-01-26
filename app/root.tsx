@@ -6,11 +6,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
 } from "@remix-run/react"
 import Navbar from "./components/Navbar"
 import styles from "./styles/app.css"
-import { getUser } from "./utils/session.server"
+import { rootAuthLoader } from "@clerk/remix/ssr.server"
+import { ClerkApp, ClerkCatchBoundary } from "@clerk/remix"
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -22,14 +22,19 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }]
 }
 
-export const loader = async ({ request }: LoaderArgs) => {
-  const user = await getUser(request)
-
-  return { user }
+export const loader = (args: LoaderArgs) => {
+  return rootAuthLoader(
+    args,
+    ({ request }) => {
+      const { userId, sessionId, getToken } = request.auth
+      console.log("Root loader auth:", { userId, sessionId, getToken })
+      return { message: `Hello from the root loader :)` }
+    },
+    { loadUser: true }
+  )
 }
 
-export default function App() {
-  const { user } = useLoaderData<typeof loader>()
+function App() {
   return (
     <html lang="en">
       <head>
@@ -37,7 +42,7 @@ export default function App() {
         <Links />
       </head>
       <body className="w-screen bg-neutral-50 min-h-screen">
-        <Navbar user={user} />
+        <Navbar />
         <Outlet />
         <ScrollRestoration />
         <Scripts />
@@ -46,3 +51,5 @@ export default function App() {
     </html>
   )
 }
+export default ClerkApp(App)
+export const CatchBoundary = ClerkCatchBoundary()

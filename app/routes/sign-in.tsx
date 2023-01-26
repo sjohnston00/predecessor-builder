@@ -16,6 +16,7 @@ import Button from "~/components/Button"
 import { createUserSession, getUser } from "~/utils/session.server"
 import Heading from "~/components/Heading"
 import Container from "~/components/Container"
+import { SignIn } from "@clerk/remix"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const loggedInUser = await getUser(request)
@@ -75,12 +76,10 @@ export const action = async ({ request }: ActionArgs) => {
 }
 export default function Login() {
   const { state } = useTransition()
-  const actionData = useActionData()
-
-  const isSubmitting = state === "submitting"
   return (
     <Container className="mt-32">
-      <Form method="post" className="flex flex-col">
+      <SignIn />
+      {/* <Form method="post" className="flex flex-col">
         <Heading type="h1" className="mb-2">
           Login
         </Heading>
@@ -113,7 +112,7 @@ export default function Login() {
             Not a member? Register
           </Link>
         </div>
-      </Form>
+      </Form> */}
     </Container>
   )
 }

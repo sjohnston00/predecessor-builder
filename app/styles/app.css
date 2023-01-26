@@ -933,6 +933,10 @@ video {
   text-align: center;
 }
 
+.text-end{
+  text-align: end;
+}
+
 .text-5xl{
   font-size: 3rem;
   line-height: 1;
@@ -991,6 +995,10 @@ video {
 
 .tracking-wider{
   letter-spacing: 0.05em;
+}
+
+.tracking-widest{
+  letter-spacing: 0.1em;
 }
 
 .text-white{

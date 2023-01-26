@@ -17,78 +17,77 @@ import PasswordInput from "~/components/PasswordInput"
 import { createUserSession, getUser } from "~/utils/session.server"
 import Container from "~/components/Container"
 import Heading from "~/components/Heading"
+import { SignUp } from "@clerk/remix"
 
-export const loader = async ({ request }: LoaderArgs) => {
-  const loggedInUser = await getUser(request)
-  if (loggedInUser) {
-    return redirect(`/users/${loggedInUser.username}`)
-  }
-  return null
-}
+// export const loader = async ({ request }: LoaderArgs) => {
+//   const loggedInUser = await getUser(request)
+//   if (loggedInUser) {
+//     return redirect(`/users/${loggedInUser.username}`)
+//   }
+//   return null
+// }
 
-export const action = async ({ request }: ActionArgs) => {
-  const formData = await request.formData()
-  const data = Object.fromEntries(formData)
+// export const action = async ({ request }: ActionArgs) => {
+//   const formData = await request.formData()
+//   const data = Object.fromEntries(formData)
 
-  const username = data.username.toString()
-  const newPassword = data["new-password"].toString()
+//   const username = data.username.toString()
+//   const newPassword = data["new-password"].toString()
 
-  const validPassword = validatePassword(newPassword)
+//   const validPassword = validatePassword(newPassword)
 
-  userSchema.parse({
-    username,
-    password: newPassword,
-  })
+//   userSchema.parse({
+//     username,
+//     password: newPassword,
+//   })
 
-  if (!validPassword) {
-    return {
-      message: `Password must contain: Lowercase, Uppercase, Special Characters and a Number`,
-    }
-  }
+//   if (!validPassword) {
+//     return {
+//       message: `Password must contain: Lowercase, Uppercase, Special Characters and a Number`,
+//     }
+//   }
 
-  const passwordHash = await bcrypt.hash(newPassword, 10)
+//   const passwordHash = await bcrypt.hash(newPassword, 10)
 
-  const userExists = await prisma.user.findFirst({
-    where: {
-      username,
-    },
-  })
+//   const userExists = await prisma.user.findFirst({
+//     where: {
+//       username,
+//     },
+//   })
 
-  if (userExists) {
-    return {
-      message: `User with this email already exists`,
-    }
-  }
+//   if (userExists) {
+//     return {
+//       message: `User with this email already exists`,
+//     }
+//   }
 
-  const { userId } = await prisma.user.create({
-    data: {
-      username: username,
-      role: {
-        connect: {
-          name: "User",
-        },
-      },
-    },
-  })
+//   const { userId } = await prisma.user.create({
+//     data: {
+//       username: username,
+//       role: {
+//         connect: {
+//           name: "User",
+//         },
+//       },
+//     },
+//   })
 
-  await prisma.userPassword.create({
-    data: {
-      passwordHash,
-      userId,
-    },
-  })
+//   await prisma.userPassword.create({
+//     data: {
+//       passwordHash,
+//       userId,
+//     },
+//   })
 
-  return createUserSession(userId, `/users/${username}`)
-}
+//   return createUserSession(userId, `/users/${username}`)
+// }
 
 export default function Register() {
   const { state } = useTransition()
-  const actionData = useActionData()
-
-  const isSubmitting = state === "submitting"
   return (
     <Container className="mt-32">
-      <Form method="post" className="flex flex-col">
+      <SignUp />
+      {/* <Form method="post" className="flex flex-col">
         <Heading type="h1" className="mb-2">
           Register
         </Heading>
@@ -125,7 +124,7 @@ export default function Register() {
             Already a member? Login
           </Link>
         </div>
-      </Form>
+      </Form> */}
     </Container>
   )
 }
