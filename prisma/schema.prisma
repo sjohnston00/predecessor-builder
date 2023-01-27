@@ -7,33 +7,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Role {
-  roleId    String   @id @default(cuid())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  users     User[]
+// model Role {
+//   roleId    String   @id @default(cuid())
+//   name      String   @unique
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @default(now())
+//   users     User[]
 
-  @@map("roles")
-  @@index([roleId])
-}
+//   @@map("roles")
+//   @@index([roleId])
+// }
 
-model User {
-  userId      String        @id @default(cuid())
-  username    String        @unique
-  email       String?       @unique
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now())
-  roleId      String
-  role        Role          @relation(fields: [roleId], references: [roleId])
-  password    UserPassword?
-  builds      Build[]
-  comments    Comment[]
-  likes       Like[]
+// model User {
+//   userId      String        @id @default(cuid())
+//   username    String        @unique
+//   email       String?       @unique
+//   createdAt   DateTime      @default(now())
+//   updatedAt   DateTime      @default(now())
+//   roleId      String
+//   role        Role          @relation(fields: [roleId], references: [roleId])
+//   password    UserPassword?
+//   builds      Build[]
+//   comments    Comment[]
+//   likes       Like[]
 
-  @@map("users")
-  @@index([userId, email, roleId])
-}
+//   @@map("users")
+//   @@index([userId, email, roleId])
+// }
 
 model Ability {
   abilityId   String    @id @default(cuid())
@@ -70,7 +70,7 @@ model Build {
   heroId       String
   hero         Hero     @relation(fields: [heroId], references: [heroId])
   userId       String?
-  user         User?    @relation(fields: [userId], references: [userId])
+  // user         User?    @relation(fields: [userId], references: [userId])
   comments     Comment[]
   likes        Like[]
 
@@ -78,20 +78,20 @@ model Build {
   @@index([userId, buildId, heroId, name])
 }
 
-model UserPassword {
-  userId       String    @id
-  passwordHash String
-  user         User      @relation(fields: [userId], references: [userId])  
+// model UserPassword {
+//   userId       String    @id
+//   passwordHash String
+//   user         User      @relation(fields: [userId], references: [userId])  
 
-  @@map("userPasswords")
-  @@index([userId])
-}
+//   @@map("userPasswords")
+//   @@index([userId])
+// }
 
 model Comment {
   commentId    String   @id @default(cuid())
   content      String
   userId       String
-  user         User     @relation(fields: [userId], references: [userId])
+  // user         User     @relation(fields: [userId], references: [userId])
   buildId      String
   build        Build    @relation(fields: [buildId], references: [buildId])
 
@@ -102,7 +102,7 @@ model Comment {
 model Like {
   likeId       String   @id @default(cuid())
   userId       String
-  user         User     @relation(fields: [userId], references: [userId])
+  // user         User     @relation(fields: [userId], references: [userId])
   buildId      String
   build        Build    @relation(fields: [buildId], references: [buildId])
 

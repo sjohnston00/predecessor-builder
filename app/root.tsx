@@ -27,7 +27,6 @@ export const loader = (args: LoaderArgs) => {
     args,
     ({ request }) => {
       const { userId, sessionId, getToken } = request.auth
-      console.log("Root loader auth:", { userId, sessionId, getToken })
       return { message: `Hello from the root loader :)` }
     },
     { loadUser: true }
