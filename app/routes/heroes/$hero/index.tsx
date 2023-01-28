@@ -10,8 +10,6 @@ import { prisma } from "~/utils/prisma.server";
 export const loader = async ({ params }: LoaderArgs) => {
   const heroName = params.hero as string;
 
-  // const hero = await getHeroByName(heroName);
-
   const hero = await prisma.hero.findFirst({
     where: {
       name: { mode: "insensitive", equals: heroName }

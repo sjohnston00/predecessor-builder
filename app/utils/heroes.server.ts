@@ -9,6 +9,19 @@ export async function getAllHeroes() {
   });
 }
 
+export async function heroExistByName(heroName: string) {
+  const heroWithName = await prisma.hero.count({
+    where: {
+      name: { equals: heroName, mode: "insensitive" }
+    }
+  });
+
+  if (!heroWithName) {
+    return false;
+  }
+  return true;
+}
+
 export async function getHeroByName(name: string) {
   return await prisma.hero.findFirst({
     where: {
