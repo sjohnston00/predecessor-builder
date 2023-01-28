@@ -62,7 +62,7 @@ model Hero {
 
 model Build {
   buildId      String      @id @default(cuid())
-  name         String
+  name         String     @unique
   abilityOrder String[]
   items        String[]
   createdAt    DateTime @default(now())
