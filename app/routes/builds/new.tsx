@@ -10,11 +10,11 @@ import {
   lockOtherSkillsForIndex,
 } from "~/utils"
 import NumberCheckbox from "~/components/NumberCheckbox"
-import { getUserId } from "~/utils/session.server"
 import Input from "~/components/Input"
 import Select from "~/components/Select"
 import Heading from "~/components/Heading"
 import Label from "~/components/Label"
+import { getAuth } from "@clerk/remix/ssr.server"
 
 export const loader = async () => {
   const heroes = await prisma.hero.findMany()
@@ -23,14 +23,16 @@ export const loader = async () => {
   }
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async (args: ActionArgs) => {
+  const { request } = args
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
   const levels = JSON.parse(data.skillOrder.toString()) as string[]
   const heroName = data.hero.toString()
   const buildRole = data.role.toString()
   const buildName = data.name.toString().replaceAll(" ", "-")
-  const loggedInUserId = await getUserId(request)
+
+  const { userId } = await getAuth(args)
   const hero = await prisma.hero.findFirst({
     where: {
       name: {
@@ -52,7 +54,7 @@ export const action = async ({ request }: ActionArgs) => {
       abilityOrder: levels,
       role: buildRole || "Any",
       heroId: hero.heroId,
-      userId: loggedInUserId,
+      userId: userId,
     },
   })
 

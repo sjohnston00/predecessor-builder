@@ -6,15 +6,19 @@ import { Form, useLoaderData, useTransition } from "@remix-run/react"
 import { prisma } from "~/utils/prisma.server"
 import Textarea from "~/components/Textarea"
 import Button from "~/components/Button"
-import { getUserId, requireUserId } from "~/utils/session.server"
+import { requireUserId } from "~/utils/session.server"
 import Heading from "~/components/Heading"
 import LinkButton from "~/components/LinkButton"
 import Container from "~/components/Container"
+import { getAuth } from "@clerk/remix/ssr.server"
+import type { User } from "@clerk/clerk-sdk-node"
+import clerkClient from "@clerk/clerk-sdk-node"
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async (args: LoaderArgs) => {
+  const { params } = args
   const buildName = params.buildName
   const hero = params.hero
-  const loggedInUserId = await getUserId(request)
+  const { userId } = await getAuth(args)
 
   if (!buildName) throw redirect("/builds/")
 
@@ -27,17 +31,8 @@ export const loader = async ({ params, request }: LoaderArgs) => {
     },
     include: {
       hero: true,
-      user: true,
-      comments: {
-        include: {
-          user: true,
-        },
-      },
-      likes: {
-        include: {
-          user: true,
-        },
-      },
+      comments: true,
+      likes: true,
     },
   })
 
@@ -46,26 +41,32 @@ export const loader = async ({ params, request }: LoaderArgs) => {
       status: 404,
     })
 
+  let buildUser: User | null | undefined
+
+  if (build.userId) {
+    buildUser = await clerkClient.users.getUser(build.userId)
+  }
+
   const loggedInUserHasBuildLike = await prisma.like.findFirst({
     where: {
-      userId: loggedInUserId || "",
+      userId: userId || "",
       buildId: build.buildId,
     },
   })
 
   //NOTE: Builds can be anonymous so if the users is not logged in then, build.userId will equal loggedInUserId for every anonymours user
   //So we check whether the user is even loggedinfirst and then check whether they are the same
-  const isLoggedInUsersBuild =
-    !!loggedInUserId && build.userId === loggedInUserId
-
-  if (!build) throw redirect("/builds/")
+  const isLoggedInUsersBuild = !!userId && build.userId === userId
 
   return {
     loggedInUserHasBuildLike,
     isLoggedInUsersBuild,
-    build,
+    build: {
+      ...build,
+      user: buildUser,
+    },
     hero,
-    isUserLoggedIn: !!loggedInUserId,
+    isUserLoggedIn: !!userId,
   }
 }
 
@@ -137,7 +138,7 @@ export default function BuildNumber() {
       <Heading type="h2">Comments: [{build.comments.length}]</Heading>
       {build.comments.map((comment) => (
         <p key={comment.commentId}>
-          {comment.content} - {comment.user.username}
+          {comment.content} - {comment.userId}
         </p>
       ))}
 
