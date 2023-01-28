@@ -32,6 +32,7 @@
 - [ ] Move items to db from json file
 - [ ] Make build items be a relationship to the Items table
 - [ ] Make build abilites be a relationship to the Abilities table
+- [ ] Add tests
 
 # Welcome to Remix!
 
