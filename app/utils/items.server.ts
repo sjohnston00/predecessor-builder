@@ -17,6 +17,12 @@ export function getItemsEqualToName(name: string) {
   ) as Item[];
 }
 
+export function getItemEqualToName(name: string) {
+  return (items as Item[]).find(
+    (item) => item.name.toLowerCase() === name.toLowerCase()
+  );
+}
+
 export function getItemsNotEqualToName(name: string) {
   return items.filter(
     (item) => item.name.toLowerCase() !== name.toLowerCase()
@@ -48,4 +54,16 @@ export function getTier3Items() {
   return items.filter((item) =>
     item.cost ? item.cost >= 2600 : false
   ) as Item[];
+}
+
+export function getItemsByNameArray(names: string[]) {
+  const itemsArr: Item[] = [];
+  //NOTE: Could do a .map & .filter here, but seems easier to only populate with found item names
+  names.forEach((name) => {
+    const item = getItemEqualToName(name);
+    if (item) {
+      itemsArr.push(item);
+    }
+  });
+  return itemsArr;
 }

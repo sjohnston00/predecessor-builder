@@ -12,7 +12,10 @@ import LinkButton from "~/components/LinkButton";
 import Container from "~/components/Container";
 import { getAuth } from "@clerk/remix/ssr.server";
 import type { User } from "@clerk/remix/dist/api/index";
+import type { Item } from "~/types/items.server";
 import clerkClient from "~/utils/clerk.server";
+import { getItemsByNameArray } from "~/utils/items.server";
+import ItemButton from "~/components/ItemButton";
 
 export const loader = async (args: LoaderArgs) => {
   const { params } = args;
@@ -47,6 +50,12 @@ export const loader = async (args: LoaderArgs) => {
     buildUser = await clerkClient.users.getUser(build.userId);
   }
 
+  let buildItems: Item[] | undefined;
+
+  if (build.items) {
+    buildItems = getItemsByNameArray(build.items);
+  }
+
   const loggedInUserHasBuildLike = await prisma.like.findFirst({
     where: {
       userId: userId || "",
@@ -63,7 +72,8 @@ export const loader = async (args: LoaderArgs) => {
     isLoggedInUsersBuild,
     build: {
       ...build,
-      user: buildUser
+      user: buildUser,
+      items: buildItems
     },
     hero,
     isUserLoggedIn: !!userId
@@ -135,7 +145,21 @@ export default function BuildNumber() {
         By: {build.user?.username ? `${build.user?.username}` : "Anonymous"}
       </p>
       <p>Likes: [{build.likes.length}]</p>
-      <Heading type='h2'>Comments: [{build.comments.length}]</Heading>
+      <Heading type='h2'>Items</Heading>
+      <div className='grid grid-cols-6 gap-2 self-stretch min-h-[139px]'>
+        {build.items?.map((item) => (
+          <ItemButton
+            item={item}
+            imageHeight={75}
+            imageWidth={75}
+            key={`${item.name}`}
+            className='bg-transparent'
+          />
+        ))}
+      </div>
+      <Heading type='h2'>
+        Comments <sup className='text-gray-400'>{build.comments.length}</sup>
+      </Heading>
       {build.comments.map((comment) => (
         <p key={comment.commentId}>
           {comment.content} - {comment.userId}

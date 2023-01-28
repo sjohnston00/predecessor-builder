@@ -39,6 +39,7 @@ export const action = async (args: ActionArgs) => {
   const heroName = data.hero.toString();
   const buildRole = data.role.toString();
   const buildName = data.name.toString().replaceAll(" ", "-");
+  const items = formData.getAll("items").map((item) => item.toString());
 
   const { userId } = await getAuth(args);
   const hero = await prisma.hero.findFirst({
@@ -62,7 +63,8 @@ export const action = async (args: ActionArgs) => {
       abilityOrder: levels,
       role: buildRole || "Any",
       heroId: hero.heroId,
-      userId: userId
+      userId: userId,
+      items: items
     }
   });
 
@@ -70,8 +72,8 @@ export const action = async (args: ActionArgs) => {
 };
 
 export default function NewBuild() {
-  const buildNameRef = useRef<HTMLInputElement>(null);
-  const buildRoleRef = useRef<HTMLInputElement>(null);
+  // const buildNameRef = useRef<HTMLInputElement>(null);
+  // const buildRoleRef = useRef<HTMLInputElement>(null);
   const loaderData = useLoaderData<typeof loader>();
   const { heroes } = loaderData;
 
@@ -166,7 +168,7 @@ export default function NewBuild() {
               type='text'
               name='name'
               id='name'
-              ref={buildNameRef}
+              // ref={buildNameRef}
               minLength={3}
               maxLength={30}
               required
@@ -176,7 +178,7 @@ export default function NewBuild() {
               type='text'
               name='role'
               id='role'
-              ref={buildRoleRef}
+              // ref={buildRoleRef}
               required
             />
           </div>
@@ -240,11 +242,28 @@ export default function NewBuild() {
               id='skillOrder'
               value={JSON.stringify(levels)}
             />
+            {/* <input
+              type='hidden'
+              name='items'
+              id='items'
+              value={choosenItems.map((item) => item.name).join(",")}
+            /> */}
+            {choosenItems.map((item) => (
+              <input
+                key={item.name}
+                type='hidden'
+                name='items'
+                id='items'
+                value={item.name}
+              />
+            ))}
+
             <button
               type='submit'
               className='p-2 rounded bg-indigo-500 text-white mt-2 disabled:opacity-30 transition'
               // onClick={calcLevels}
-              disabled={levelsIncomplete}>
+              // disabled={levelsIncomplete}
+            >
               Submit
             </button>
             <button
@@ -273,9 +292,8 @@ export default function NewBuild() {
                     (choosenItem1) => choosenItem1.name !== choosenItem.name
                   )
                 )
-              }>
-              <img src={choosenItem.image} height={50} width={50} alt='' />
-            </ItemButton>
+              }
+            />
           ))}
         </div>
         <Heading type='h2' className='my-4 self-start'>
