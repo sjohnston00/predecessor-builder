@@ -27,8 +27,11 @@
 - [ ] Save buildNames as normal strings
 - [ ] Make every build link url use '-' (dashes) instead of ' ' (spaces) e.g `href={/builds/${build.name.replaceAll(' ', '-)}}` (make sure to reverse this process when getting the build by build name e.g: `params.buildName.replaceAll('-', ' ')`
 - [x] Show all items page (include search)
-- [ ] Allow builds to include items (include situational items)
-- [ ] Items page, show build that include these items
+- [x] Allow builds to include items
+- [x] Items page, show build that include these items
+- [ ] Move items to db from json file
+- [ ] Make build items be a relationship to the Items table
+- [ ] Make build abilites be a relationship to the Abilities table
 
 # Welcome to Remix!
 
