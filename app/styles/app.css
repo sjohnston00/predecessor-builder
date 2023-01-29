@@ -794,6 +794,10 @@ video {
   gap: 1rem;
 }
 
+.gap-1{
+  gap: 0.25rem;
+}
+
 .self-start{
   align-self: flex-start;
 }
@@ -1068,6 +1072,11 @@ video {
 .text-emerald-500{
   --tw-text-opacity: 1;
   color: rgb(16 185 129 / var(--tw-text-opacity));
+}
+
+.text-gray-600{
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity));
 }
 
 .underline{

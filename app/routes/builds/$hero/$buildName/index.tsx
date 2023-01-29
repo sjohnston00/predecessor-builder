@@ -6,7 +6,6 @@ import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { prisma } from "~/utils/prisma.server";
 import Textarea from "~/components/Textarea";
 import Button from "~/components/Button";
-import { requireUserId } from "~/utils/session.server";
 import Heading from "~/components/Heading";
 import LinkButton from "~/components/LinkButton";
 import Container from "~/components/Container";
@@ -80,19 +79,36 @@ export const loader = async (args: LoaderArgs) => {
   };
 };
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async (args: ActionArgs) => {
+  const { request, params } = args;
   const formData = await request.formData();
+  const buildName = params.buildName as string;
   const data = Object.fromEntries(formData);
-  const loggedInUserId = await requireUserId(request);
+  const { userId } = await getAuth(args);
 
-  //TODO: instead of passing the loggedInUserHasBuildLike likeId from the form when can just make a call to the like table to check whether the user has already liked this build
+  if (!userId) return null;
 
   if (data._action === "like") {
+    const loggedInUserHasBuildLike = await prisma.like.findFirst({
+      where: {
+        AND: [
+          {
+            build: {
+              name: {
+                equals: buildName,
+                mode: "insensitive"
+              }
+            }
+          },
+          { userId: userId }
+        ]
+      }
+    });
     //If we already like it, remove the like
-    if (data.loggedInUserHasBuildLike) {
+    if (loggedInUserHasBuildLike) {
       await prisma.like.delete({
         where: {
-          likeId: data.loggedInUserHasBuildLike?.toString()
+          likeId: loggedInUserHasBuildLike.likeId
         }
       });
       return null;
@@ -100,7 +116,7 @@ export const action = async ({ request }: ActionArgs) => {
     //Else we haven't liked it, create a like
     await prisma.like.create({
       data: {
-        userId: loggedInUserId,
+        userId: userId,
         buildId: data.buildId.toString()
       }
     });
@@ -110,7 +126,7 @@ export const action = async ({ request }: ActionArgs) => {
   if (data._action === "comment") {
     await prisma.comment.create({
       data: {
-        userId: loggedInUserId,
+        userId: userId,
         buildId: data.buildId.toString(),
         content: data.comment.toString()
       }
@@ -144,7 +160,6 @@ export default function BuildNumber() {
       <p>
         By: {build.user?.username ? `${build.user?.username}` : "Anonymous"}
       </p>
-      <p>Likes: [{build.likes.length}]</p>
       <Heading type='h2'>Items</Heading>
       <div className='grid grid-cols-6 gap-2 self-stretch min-h-[139px]'>
         {build.items?.map((item) => (
@@ -189,7 +204,7 @@ export default function BuildNumber() {
         <Button
           type='submit'
           disabled={isSubmitting}
-          className='bg-transparent text-black'>
+          className='bg-transparent text-black inline-flex gap-1 items-center'>
           {loggedInUserHasBuildLike ? (
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -213,6 +228,7 @@ export default function BuildNumber() {
               />
             </svg>
           )}
+          <span className='text-gray-600'>{build.likes.length}</span>
         </Button>
       </Form>
       <Form method='post'>
