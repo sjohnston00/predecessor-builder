@@ -2,7 +2,7 @@ import React from "react";
 import type { ActionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import type { LoaderArgs } from "@remix-run/node";
-import { Form, useLoaderData, useTransition } from "@remix-run/react";
+import { Form, Link, useLoaderData, useTransition } from "@remix-run/react";
 import { prisma } from "~/utils/prisma.server";
 import Textarea from "~/components/Textarea";
 import Button from "~/components/Button";
@@ -168,9 +168,18 @@ export default function BuildNumber() {
         </LinkButton>
       </div>
       <p>Hero: {build.hero.name}</p>
-      <p>
-        By: {build.user?.username ? `${build.user?.username}` : "Anonymous"}
-      </p>
+      <Link to={build.user ? `/users/${build.user.username}` : "#"}>
+        <div className='flex gap-1 items-center'>
+          <span>{build.user?.username || "Anonymous"}</span>
+          <img
+            src={build.user?.profileImageUrl}
+            alt='User profile'
+            loading='lazy'
+            height={32}
+            width={32}
+          />
+        </div>
+      </Link>
       <Heading type='h2'>Items</Heading>
       <div className='grid grid-cols-6 gap-2 self-stretch min-h-[139px]'>
         {build.items?.map((item) => (
@@ -189,9 +198,20 @@ export default function BuildNumber() {
       {build.comments.map((comment) => (
         <p className='mb-4 flex justify-between' key={comment.commentId}>
           {comment.content}{" "}
-          <span className='text-gray-400'>
-            {comment.user?.username || "Anonymous"}
-          </span>
+          <Link to={build.user ? `/users/${build.user.username}` : "#"}>
+            <div className='flex gap-1 items-center'>
+              <span className='text-gray-400'>
+                {comment.user?.username || "Anonymous"}
+              </span>
+              <img
+                src={comment.user?.profileImageUrl}
+                alt='User profile'
+                loading='lazy'
+                height={32}
+                width={32}
+              />
+            </div>
+          </Link>
         </p>
       ))}
 
