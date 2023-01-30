@@ -257,10 +257,13 @@ export default function BuildNumber() {
           Comments <sup className="text-gray-400">{build.comments.length}</sup>
         </Heading>
         {build.comments.map((comment) => (
-          <p className="mb-4 flex justify-between" key={comment.commentId}>
+          <pre
+            className="font-sans mb-4 flex gap-2
+             justify-between whitespace-pre-wrap break-all"
+            key={comment.commentId}>
             {comment.content}{" "}
             <Link
-              className="p-1"
+              className="p-1 whitespace-nowrap"
               to={build.user ? `/users/${build.user.username}` : "#"}>
               <div className="flex gap-1 items-center">
                 <span className="text-gray-400">
@@ -275,10 +278,10 @@ export default function BuildNumber() {
                 />
               </div>
             </Link>
-          </p>
+          </pre>
         ))}
       </div>
-      <Form method="post">
+      <Form method="post" className="mb-4">
         <input type="hidden" name="_action" id="_action" value="comment" />
         <input
           type="hidden"
@@ -292,6 +295,7 @@ export default function BuildNumber() {
           name="comment"
           id="comment"
           required
+          className="min-h-[100px]"
         />
         <Button type="submit" disabled={isSubmitting || !isUserLoggedIn}>
           Comment
