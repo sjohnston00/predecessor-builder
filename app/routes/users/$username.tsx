@@ -1,65 +1,109 @@
-import React from "react";
-import type { LoaderArgs } from "@remix-run/node";
-import { Form, useLoaderData, Link } from "@remix-run/react";
-import { prisma } from "~/utils/prisma.server";
-import Button from "~/components/Button";
-import Heading from "~/components/Heading";
-import { getUserId } from "~/utils/session.server";
+import React from "react"
+import type { LoaderArgs } from "@remix-run/node"
+import { useLoaderData, Link } from "@remix-run/react"
+import { prisma } from "~/utils/prisma.server"
+import Heading from "~/components/Heading"
+import clerkClient from "~/utils/clerk.server"
+import { getAuth } from "@clerk/remix/ssr.server"
+import Container from "~/components/Container"
 
-export const loader = async ({ params, request }: LoaderArgs) => {
-  const { username } = params;
-  const loggedInUserId = await getUserId(request);
-
-  if (!username) {
-    throw new Response(`Couldn't find user with username "${username}"`, {
-      status: 404
-    });
-  }
-
-  const user = await prisma.user.findFirst({
-    where: {
-      username
-    },
-    include: {
-      role: true,
-      builds: {
-        include: {
-          hero: true
-        }
-      }
-    }
-  });
+export const loader = async (args: LoaderArgs) => {
+  const { params } = args
+  const username = params.username as string
+  const { userId } = await getAuth(args)
+  const [user] = await clerkClient.users.getUserList({
+    username: [username],
+  })
 
   if (!user) {
-    throw new Response(`Couldn't find user with ID "${params.userId}"`, {
-      status: 404
-    });
+    throw new Response(`Couldn't find user with username "${username}"`, {
+      status: 404,
+    })
   }
 
-  return { user, isLoggedInUser: user.userId === loggedInUserId };
-};
+  const builds = await prisma.build.findMany({
+    where: {
+      userId: user.id,
+    },
+    include: {
+      hero: true,
+      likes: true,
+      comments: true,
+    },
+  })
+  return {
+    user: {
+      ...user,
+      builds,
+    },
+    isLoggedInUser: user.id === userId,
+  }
+}
 
 export default function UserId() {
-  // const {age, email, firstname, lastname, role: {name: roleName}} = useLoaderData<typeof loader>()
-  const { user, isLoggedInUser } = useLoaderData<typeof loader>();
+  const { user } = useLoaderData<typeof loader>()
 
   return (
-    <div className='px-1'>
-      <Heading type='h1'>User Details</Heading>
-      <Heading type='h2'>Builds</Heading>
-      {user.builds.map((build) => (
-        <div key={build.buildId}>
-          <Link to={`/builds/${build.hero.name}/${build.name}`}>
+    <Container>
+      <Heading type="h1" className="flex gap-8 items-center mb-4">
+        <img
+          src={user.profileImageUrl}
+          alt="user profile"
+          height={75}
+          width={75}
+        />
+        {user.username}
+      </Heading>
+      <div className="mt-4">
+        <Heading type="h2" className="mb-2">
+          Builds
+        </Heading>
+        {user.builds.map((build) => (
+          <Link
+            to={`/builds/${build.hero.name}/${build.name}`}
+            key={build.buildId}
+            className="mb-2">
             {build.name}
+            <span className="block text-sm text-gray-400">
+              {build.hero.name}
+            </span>
+            <div className="flex gap-2 items-center">
+              <span className="flex gap-1 items-center text-sm text-gray-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"
+                  />
+                </svg>{" "}
+                {build.likes.length}
+              </span>
+              <span className="flex gap-1 items-center text-sm text-gray-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
+                  />
+                </svg>
+                {build.comments.length}
+              </span>
+            </div>
           </Link>
-        </div>
-      ))}
-      <pre>{JSON.stringify(user, null, 2)}</pre>
-      {isLoggedInUser ? (
-        <Form method='post' action='/logout'>
-          <Button type='submit'>Logout</Button>
-        </Form>
-      ) : null}
-    </div>
-  );
+        ))}
+      </div>
+    </Container>
+  )
 }

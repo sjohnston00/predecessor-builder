@@ -9,7 +9,7 @@ export default function Container({
   HTMLDivElement
 >) {
   return (
-    <div className={`px-2 max-w-2xl m-auto ${className}`} {...props}>
+    <div className={`px-2 max-w-4xl m-auto ${className}`} {...props}>
       {children}
     </div>
   )
